@@ -1,0 +1,1 @@
+curl --location --request GET 'http://api.marketstack.com/v1/eod?access_key=3c99248d6bcca4a8fe08c99eace0691a&symbols=AAPL&date_from=2022-07-01&date_to=2022-09-30&exchange=XNAS'
