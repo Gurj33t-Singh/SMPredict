@@ -1,14 +1,17 @@
-from ReadJson import ReadJson
+from ParseFile import ReadJson
 import pymongo
 
-TrainData=ReadJson()
-TrainData.jsonFileToDict("TrainFilePath", "rt")
-TrainData.getDataList()
+class MongoCon:
+    Client = None
+    db = None
+    Collection = None
+    #insertTrainList = trainCollection.insert_many(TrainData.DataList)
+    def ClientCon(self, MongoUrl):
+        self.Client=pymongo.MongoClient(MongoUrl)
 
+    def DbCon(self, DbNameStr):
+        self.db=self.Client[DbNameStr]
 
-Client=pymongo.MongoClient("mongodb://127.0.0.1:27017/")
-db=Client["SMDB"]
-trainCollection=db["train"]
-#insertTrainList=trainCollection.insert_many(TrainData.DataList)
-for doc in trainCollection.find():
-    print(doc)
+    def CollectionCon(self, CollectionNameStr):
+        self.Collection=self.db[CollectionNameStr]
+
