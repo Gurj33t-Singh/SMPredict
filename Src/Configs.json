@@ -1,6 +1,9 @@
 {
   "TrainFilePath": "Samples/EOD - AAPL - NASDAQ - 2022-01-01 - 2022-03-31.json",
+  "TestFilePath": "Samples/EOD - AAPL - NASDAQ - 2022-07-01 - 2022-09-30.json",
   "MongoURL": "mongodb://127.0.0.1:27017/",
   "DB": "SMDB",
-  "TrainingCollecion": "train"
+  "TrainingCollection": "train",
+  "TestingCollection": "test",
+  "UniqueKey": "date"
 }

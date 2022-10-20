@@ -3,25 +3,27 @@ import json
 from Src import GetConfigs
 
 
-class ReadJson:
+class ReadFile:
     Str=None
     Dict=None
-    DataList=None
+    FilePath=None
+    fileMode=None
+
+    #Constructor to initialise file path and file mode
+    def __init__(self, FilePathConf, fileMode):
+        self.FilePath=GetConfigs.getAbsPath(FilePathConf)
+        self.fileMode=fileMode
+
     #Convert File Obj to Json String
-    def getFileStr(self, FilePathConf, fileMode):
-        self.Str=FileOps.readFileAsStr(GetConfigs.getAbsPath(FilePathConf), fileMode)
+    def FileToStr(self):
+        self.Str= FileOps.openFile(self.FilePath, self.fileMode).read()
 
     #Json String to Python Dictionary
     def jsonStrToDict(self):
         self.Dict=json.loads(self.Str)
 
     #Json File to Dictionary
-    def jsonFileToDict(self, FilePathConf, fileMode):
-        jsonStr=FileOps.readFileAsStr(GetConfigs.getAbsPath(FilePathConf), fileMode)
+    def jsonFileToDict(self):
+        jsonStr= FileOps.openFile(self.FilePath, self.fileMode).read()
         self.Dict=json.loads(jsonStr)
 
-    # Get stock data from dictionary as list
-    def getDataList(self):
-        for index in self.Dict:
-            if (index == "data"):
-                self.DataList = self.Dict[index]

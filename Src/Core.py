@@ -1,14 +1,9 @@
-from ParseFile import *
-from MongoConnect import *
+from EodOps import *
 
-TrainData=ReadJson()
-TrainData.jsonFileToDict("TrainFilePath", "rt")
-TrainData.getDataList()
+EodTrainObj = Eod("TrainFilePath", "rt", "MongoURL", "DB", "TrainingCollection", "UniqueKey")
+EodTrainObj.CreateCollection()
+#EodTrainObj.ReadCollection()
 
-LocalMongo=MongoCon()
-LocalMongo.ClientCon(GetConfigs.getConf("MongoURL"))
-LocalMongo.DbCon(GetConfigs.getConf("DB"))
-LocalMongo.CollectionCon(GetConfigs.getConf("TrainingCollecion"))
 
-for doc in LocalMongo.Collection.find():
-    print(doc)
+EodTestObj = Eod("TestFilePath", "rt", "MongoURL", "DB", "TestingCollection", "UniqueKey")
+EodTestObj.CreateCollection()
