@@ -1,4 +1,4 @@
 from EodOps import *
 
-EodObj=Eod()
+EodObj= Eod("TrainFilePath", "rt", "MongoURL", "DB", "TrainingCollection", "UniqueKey")
 EodObj.CreateTrainCollection()

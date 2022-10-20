@@ -6,7 +6,6 @@ from Src import GetConfigs
 class ReadFile:
     Str=None
     Dict=None
-    DataList=None
     FilePath=None
     fileMode=None
 
@@ -28,8 +27,3 @@ class ReadFile:
         jsonStr= FileOps.openFile(self.FilePath, self.fileMode).read()
         self.Dict=json.loads(jsonStr)
 
-    # Get stock data from dictionary as list
-    def getDataList(self):
-        for index in self.Dict:
-            if (index == "data"):
-                self.DataList = self.Dict[index]
