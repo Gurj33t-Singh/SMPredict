@@ -1,8 +1,8 @@
 class FileOps:
     FileObj=None
 
-    #returns file as string
+    #returns file as file obj
     @staticmethod
-    def readFileAsStr(Path, mode):
+    def openFile(Path, mode):
         FileObj=open(Path, mode)
-        return FileObj.read()
+        return FileObj

@@ -1,14 +1,12 @@
 from ParseFile import *
 from MongoConnect import *
 
-TrainData=ReadJson()
-TrainData.jsonFileToDict("TrainFilePath", "rt")
+TrainData=ReadFile("TrainFilePath", "rt")
+TrainData.jsonFileToDict()
 TrainData.getDataList()
 
-LocalMongo=MongoCon()
-LocalMongo.ClientCon(GetConfigs.getConf("MongoURL"))
-LocalMongo.DbCon(GetConfigs.getConf("DB"))
-LocalMongo.CollectionCon(GetConfigs.getConf("TrainingCollecion"))
+LocalMongo=MongoCon(GetConfigs.getConf("MongoURL"), GetConfigs.getConf("DB"), GetConfigs.getConf("TrainingCollecion"))
+
 
 for doc in LocalMongo.Collection.find():
     print(doc)
