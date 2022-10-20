@@ -12,6 +12,7 @@ class Eod:
     DBConf=None
     CollectionConf=None
     UniqueKeyConf=None
+    LocalMongo=None
 
     #initialise variables
     def __init__(self, FilePathConf, FileModeStr, MongoUrlConf, DBConf, CollectionConf,
@@ -22,23 +23,28 @@ class Eod:
         self.DBConf=DBConf
         self.CollectionConf=CollectionConf
         self.UniqueKeyConf=UniqueKeyConf
+        self.LocalMongo=MongoCon(GetConfigs.getConf(MongoUrlConf), GetConfigs.getConf(DBConf),
+                              GetConfigs.getConf(CollectionConf))
 
-    def getJsonData(self):
+    def getEodData(self):
         TrainData = ReadFile(self.FilePathConf, self.FileModeStr)
         TrainData.jsonFileToDict()
-        self.getDataList(TrainData.Dict)
-
-    def CreateTrainCollection(self):
-        self.getJsonData()
-        LocalMongo = MongoCon(GetConfigs.getConf(self.MongoUrlConf), GetConfigs.getConf(self.DBConf),
-                              GetConfigs.getConf(self.CollectionConf))
-        LocalMongo.Collection.create_index([(GetConfigs.getConf(self.UniqueKeyConf), pymongo.ASCENDING)], unique=True)
-        LocalMongo.Collection.insert_many(self.DataList)
-        for doc in LocalMongo.Collection.find():
-            print(doc)
-
-    # Get stock data from dictionary as list
-    def getDataList(self, eodDict):
-        for index in eodDict:
+        for index in TrainData.Dict:
             if (index == "data"):
-                self.DataList = eodDict[index]
+                self.DataList = TrainData.Dict[index]
+
+    def CreateCollection(self):
+        self.getEodData()
+        #self.LocalMongo = MongoCon(GetConfigs.getConf(self.MongoUrlConf), GetConfigs.getConf(self.DBConf), GetConfigs.getConf(self.CollectionConf))
+        self.CreateUniqueIndex()
+        self.LocalMongo.Collection.insert_many(self.DataList)
+
+    #Create unique true index for collection based on key provided
+    def CreateUniqueIndex(self):
+        self.LocalMongo.Collection.create_index([(GetConfigs.getConf(self.UniqueKeyConf), pymongo.ASCENDING)],
+                                                unique=True)
+
+    # read the EOD collection from Mongo
+    def ReadCollection(self):
+        for doc in self.LocalMongo.Collection.find():
+            print(doc)
