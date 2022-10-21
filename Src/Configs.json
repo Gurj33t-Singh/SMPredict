@@ -5,5 +5,7 @@
   "DB": "SMDB",
   "TrainingCollection": "train",
   "TestingCollection": "test",
-  "UniqueKey": "date"
+  "EODUniqueKey": "date",
+  "Sample": "Samples/JSON.json",
+  "DataListKey": "data"
 }

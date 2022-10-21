@@ -1,17 +1,21 @@
-from ParseFile import ReadFile
+from FileOps import Fops
 import pymongo
 
 class MongoCon:
-    Client = None
-    db = None
+
+    """Client = None
+    db = None"""
+
     Collection = None
-    #insertTrainList = trainCollection.insert_many(TrainData.DataList)
+
 
     def __init__(self, mongoUrlStr, dbNameStr, collectionNameStr):
-        self.ClientCon(mongoUrlStr)
+        """self.ClientCon(mongoUrlStr)
         self.DbCon(dbNameStr)
-        self.CollectionCon(collectionNameStr)
+        self.CollectionCon(collectionNameStr)"""
+        self.Collection=pymongo.MongoClient(mongoUrlStr)[dbNameStr][collectionNameStr]
 
+    """
     def ClientCon(self, MongoUrlStr):
         self.Client=pymongo.MongoClient(MongoUrlStr)
 
@@ -20,4 +24,5 @@ class MongoCon:
 
     def CollectionCon(self, CollectionNameStr):
         self.Collection=self.db[CollectionNameStr]
+        """
 
