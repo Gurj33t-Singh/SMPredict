@@ -6,6 +6,6 @@
   "TrainingCollection": "train",
   "TestingCollection": "test",
   "EODUniqueKey": "date",
-  "Sample": "Samples/JSON.json",
+  "Sample": "Samples/TestData.json",
   "DataListKey": "data"
 }
