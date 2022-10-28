@@ -1,6 +1,11 @@
 import json
 from Src import GetConfigs
 
+"""
+The class takes filepath key fron config 
+File mode as a string 
+Opens the file and reads the data as either string or dictionary with their respective methods 
+"""
 
 class Fops:
     Str=None
@@ -9,9 +14,9 @@ class Fops:
     fileMode=None
 
     #Constructor to initialise file path and file mode
-    def __init__(self, FilePathConf, fileMode):
+    def __init__(self, FilePathConf, fileModeStr):
         self.FilePath=GetConfigs.getAbsPath(FilePathConf)
-        self.fileMode=fileMode
+        self.fileMode=fileModeStr
 
     #Convert File Obj to Json String
     def FileToStr(self):

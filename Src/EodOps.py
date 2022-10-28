@@ -1,51 +1,82 @@
-from MongoConnect import *
+from MongoCon import *
 import GetConfigs
 import pymongo
-from FileOps import *
+from Fops import *
 
+"""
+This is specific to the EOD API 
+All thee connections and initialisations are dont in __init__
+
+"""
 
 class Eod:
-    DataList=None
+    JsonDataKeyVal=None
     FilePathConf=None
     FileModeStr=None
-    MongoUrlConf=None
-    DBConf=None
-    CollectionConf=None
+    #MongoUrlConf=None
+    #DBConf=None
+    #CollectionConf=None
     UniqueKeyConf=None
-    DbClient=None
-    DataListKey=None
+    ClientColleciton=None
+    JsonDataKeyConf=None
 
     #initialise variables
     def __init__(self, FilePathConf, FileModeStr, MongoUrlConf, DBConf, CollectionConf,
-                 UniqueKeyConf, DataListKeyConf):
+                 UniqueKeyConf, JsonDataKeyConf):
+
+        #file to be read (Fops)
         self.FilePathConf=FilePathConf
         self.FileModeStr=FileModeStr
-        self.MongoUrlConf=MongoUrlConf
-        self.DBConf=DBConf
-        self.CollectionConf=CollectionConf
-        self.UniqueKeyConf=UniqueKeyConf
-        self.DataListKey=DataListKeyConf
-        self.DbClient=MongoCon(GetConfigs.getConf(MongoUrlConf), GetConfigs.getConf(DBConf),
-                               GetConfigs.getConf(CollectionConf))
 
-    def CreateCollection(self):
+        #collection to be connected to (MongoCon)
+        """self.MongoUrlConf=MongoUrlConf
+        self.DBConf=DBConf
+        self.CollectionConf=CollectionConf"""
+        self.ClientColleciton = MongoCon(GetConfigs.getConf(MongoUrlConf), GetConfigs.getConf(DBConf),
+                                         GetConfigs.getConf(CollectionConf))
+
+        #additional param for mongo
+        self.UniqueKeyConf=UniqueKeyConf
+
+        #read data from response json
+        self.JsonDataKeyConf=JsonDataKeyConf
+
+
+    """
+    -Calls getEod to read the specific data from response Json 
+    -Creates a unique index based on key provided to avoid duplicate data 
+    -inserts that specific data to collection created in __init__
+    """
+    def writeCollection(self):
         self.getEodData()
         self.CreateUniqueIndex()
-        self.DbClient.Collection.insert_many(self.DataList)
+        self.ClientColleciton.Collection.insert_many(self.JsonDataKeyVal)
 
+
+    """
+    read the json response form file 
+    convert the data from dictionary 
+    read dictionary for a particular dataKey 
+    """
     def getEodData(self):
-        TrainData = Fops(self.FilePathConf, self.FileModeStr)
-        TrainData.jsonFileToDict()
-        for index in TrainData.Dict:
-            if (index == GetConfigs.getConf(self.DataListKey)):
-                self.DataList = TrainData.Dict[index]
 
-    #Create unique true index for collection based on key provided
+        # require response dictionary to parse
+        JsonData = Fops(self.FilePathConf, self.FileModeStr)
+        JsonData.jsonFileToDict()
+
+        # response dictionary parsed based to get specific key value
+        for index in JsonData.Dict:
+            if (index == GetConfigs.getConf(self.JsonDataKeyConf)):
+                self.JsonDataKeyVal = JsonData.Dict[index]
+
+    """Create unique true index for collection based on key provided"""
     def CreateUniqueIndex(self):
-        self.DbClient.Collection.create_index([(GetConfigs.getConf(self.UniqueKeyConf), pymongo.ASCENDING)],
-                                              unique=True)
+        self.ClientColleciton.Collection.create_index([(GetConfigs.getConf(self.UniqueKeyConf), pymongo.ASCENDING)],
+                                                      unique=True)
 
-    # read the EOD collection from Mongo
+
+
+    """read the EOD collection from MongoCollection"""
     def ReadCollection(self):
-        for doc in self.DbClient.Collection.find():
+        for doc in self.ClientColleciton.Collection.find():
             print(doc)

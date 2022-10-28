@@ -7,5 +7,5 @@
   "TestingCollection": "test",
   "EODUniqueKey": "date",
   "Sample": "Samples/TestData.json",
-  "DataListKey": "data"
+  "JsonDataKey": "data"
 }
