@@ -43,7 +43,7 @@ class MongoOps:
 
 
     """
-    -Calls getEod to read the specific data from response Json 
+    -Calls getRespData to read the specific data from response Json 
     -Creates a unique index based on key provided to avoid duplicate data 
     -inserts that specific data to collection created in __init__
     """
