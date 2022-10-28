@@ -3,6 +3,8 @@ from Fops import *
 import GetConfigs
 import requests
 
+
+#returns json response as dictionary from API
 def getEod():
     #create API session
     sessionObj=requests.Session()
@@ -13,9 +15,10 @@ def getEod():
         "date_to": "2022-07-31"
     }
     response=sessionObj.get("http://api.marketstack.com/v1/eod", params=queryParam)
-    EodDict=response.json()
+    return(response.json())
 
-
+"""
+def writeResp():
     #write json from response
     try:
         Fobj=open(GetConfigs.getAbsPath("Sample"), "x")
@@ -25,8 +28,9 @@ def getEod():
         Fobj = open(GetConfigs.getAbsPath("Sample"), "w")
         json.dump(EodDict, Fobj, indent="")
         Fobj.close()
+"""
+
 
 #read created file
-getEod()
-Fobj1=open(GetConfigs.getAbsPath("Sample"), "rt").read()
-print(Fobj1)
+"""Fobj1=open(GetConfigs.getAbsPath("Sample"), "rt").read()
+print(Fobj1)"""

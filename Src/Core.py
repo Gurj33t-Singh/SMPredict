@@ -1,15 +1,15 @@
-from EodOps import *
+from MongoOps import *
 
 """
 This file is being user as execution module for whole code in initial stages 
 """
 
 
-EodTrainObj = Eod("TrainFilePath", "rt", "MongoURL", "DB", "TrainingCollection", "EODUniqueKey", "JsonDataKey")
+EodTrainObj = MongoOps("MongoURL", "DB", "TrainingCollection", "EODUniqueKey", "JsonDataKey", "TrainFilePath", "rt")
 EodTrainObj.writeCollection()
 EodTrainObj.ReadCollection()
 
 
-EodTestObj = Eod("TestFilePath", "rt", "MongoURL", "DB", "TestingCollection", "EODUniqueKey", "JsonDataKey")
+EodTestObj = MongoOps("MongoURL", "DB", "TestingCollection", "EODUniqueKey", "JsonDataKey", "TestFilePath", "rt")
 EodTestObj.writeCollection()
 EodTestObj.ReadCollection()

@@ -1,5 +1,5 @@
 from MongoCon import *
-import GetConfigs
+import CallEOD
 import pymongo
 from Fops import *
 
@@ -9,7 +9,7 @@ All thee connections and initialisations are dont in __init__
 
 """
 
-class Eod:
+class MongoOps:
     JsonDataKeyVal=None
     FilePathConf=None
     FileModeStr=None
@@ -21,8 +21,8 @@ class Eod:
     JsonDataKeyConf=None
 
     #initialise variables
-    def __init__(self, FilePathConf, FileModeStr, MongoUrlConf, DBConf, CollectionConf,
-                 UniqueKeyConf, JsonDataKeyConf):
+    def __init__(self, MongoUrlConf, DBConf, CollectionConf,
+                 UniqueKeyConf, JsonDataKeyConf, FilePathConf="default", FileModeStr="default"):
 
         #file to be read (Fops)
         self.FilePathConf=FilePathConf
@@ -48,7 +48,7 @@ class Eod:
     -inserts that specific data to collection created in __init__
     """
     def writeCollection(self):
-        self.getEodData()
+        self.getRespData()
         self.CreateUniqueIndex()
         self.ClientColleciton.Collection.insert_many(self.JsonDataKeyVal)
 
@@ -58,22 +58,24 @@ class Eod:
     convert the data from dictionary 
     read dictionary for a particular dataKey 
     """
-    def getEodData(self):
+    def getRespData(self):
 
         # require response dictionary to parse
-        JsonData = Fops(self.FilePathConf, self.FileModeStr)
-        JsonData.jsonFileToDict()
+        """JsonData = Fops(self.FilePathConf, self.FileModeStr)
+        JsonData.jsonFileToDict()"""
+
+        #getting API response as dict from getEOD
+        JsonData=CallEOD.getEod()
 
         # response dictionary parsed based to get specific key value
-        for index in JsonData.Dict:
+        for index in JsonData:
             if (index == GetConfigs.getConf(self.JsonDataKeyConf)):
-                self.JsonDataKeyVal = JsonData.Dict[index]
+                self.JsonDataKeyVal = JsonData[index]
 
     """Create unique true index for collection based on key provided"""
     def CreateUniqueIndex(self):
         self.ClientColleciton.Collection.create_index([(GetConfigs.getConf(self.UniqueKeyConf), pymongo.ASCENDING)],
                                                       unique=True)
-
 
 
     """read the EOD collection from MongoCollection"""
